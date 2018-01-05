@@ -1,28 +1,30 @@
 version: '2'
-services:
 
-    mongo:
-        image: mongo:3.4
-        restart: unless-stopped
-        volumes:
-            - "${DATA_LOCATION}/mongo:/data/db"
+services:
 
     redis:
         image: redis:4-alpine
         restart: unless-stopped
+        network_mode: bridge
 
     xapi:
         image: learninglocker/xapi-service:v1.1.0
         restart: unless-stopped
+        external_links:
+            - mongodb
         environment:
-            - MONGO_URL=mongodb://mongo:27017/learninglocker_v2
+            - MONGO_URL
             - REDIS_URL=redis://redis:6379/0
         depends_on:
-            - mongo
+            - redis
+        network_mode: bridge
+        links:
             - redis
 
     api:
-        image: michzimny/learninglocker2-app:${DOCKER_TAG}
+        image: slidewiki/learninglocker2-app:${DOCKER_TAG}
+        external_links:
+            - mongodb
         environment:
             - DOMAIN_NAME
             - APP_SECRET
@@ -31,16 +33,21 @@ services:
             - SMTP_SECURED
             - SMTP_USER
             - SMTP_PASS
+            - MONGO_URL
         command: "node api/dist/server"
         restart: unless-stopped
         depends_on:
-            - mongo
             - redis
         volumes:
             - "${DATA_LOCATION}/app-storage:/opt/learninglocker/storage"
+        network_mode: bridge
+        links:
+            - redis
 
     ui:
-        image: michzimny/learninglocker2-app:${DOCKER_TAG}
+        image: slidewiki/learninglocker2-app:${DOCKER_TAG}
+        external_links:
+            - mongodb
         environment:
             - DOMAIN_NAME
             - APP_SECRET
@@ -49,17 +56,22 @@ services:
             - SMTP_SECURED
             - SMTP_USER
             - SMTP_PASS
+            - MONGO_URL
         command: "./entrypoint-ui.sh"
         restart: unless-stopped
         depends_on:
-            - mongo
             - redis
             - api
         volumes:
             - "${DATA_LOCATION}/app-storage:/opt/learninglocker/storage"
+        network_mode: bridge
+        links:
+            - redis
 
     worker:
-        image: michzimny/learninglocker2-app:${DOCKER_TAG}
+        image: slidewiki/learninglocker2-app:${DOCKER_TAG}
+        external_links:
+            - mongodb
         environment:
             - DOMAIN_NAME
             - APP_SECRET
@@ -68,23 +80,13 @@ services:
             - SMTP_SECURED
             - SMTP_USER
             - SMTP_PASS
+            - MONGO_URL
         command: "node worker/dist/server"
         restart: unless-stopped
         depends_on:
-            - mongo
             - redis
         volumes:
             - "${DATA_LOCATION}/app-storage:/opt/learninglocker/storage"
-
-    nginx:
-        image: michzimny/learninglocker2-nginx:${DOCKER_TAG}
-        environment:
-            - DOMAIN_NAME
-        restart: unless-stopped
-        depends_on:
-            - ui
-            - xapi
-        ports:
-            - "443:443"
-            - "80:80"
-
+        network_mode: bridge
+        links:
+            - redis

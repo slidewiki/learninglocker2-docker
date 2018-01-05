@@ -9,12 +9,12 @@ For LL's architecture consult http://docs.learninglocker.net/overview-architectu
 This section is about the architecture coming out of this dockerization.
 
 Official images of Mongo, Redis, and xAPI service are used.
-Additionally, build creates two Docker images: nginx and app. 
-LL application services are to be run on containers based on the app image. 
+Additionally, build creates the learninglocker2-app docker image.
+LL application services are to be run on containers based on the image. 
 
 File docker-compose.yml describes the relation between services. 
-A base configuration consists of 7 containers that are run using the above-mentioned images 
-(LL application containers - api, ui, and worker - are run using image app).
+A base configuration consists of 6 containers that are run using the above-mentioned images.
+(LL application containers - api, ui, and worker - are run using image learninglocker2-app).
 
 The only persistent locations are directories in $DATA_LOCATION (see below), 
 which are mounted as volumes to Mongo container and app-based containers.
@@ -38,6 +38,7 @@ To configure adjust settings in .env:
 * DOMAIN_NAME - domain name as the instance is to be accessed from the world
 * APP_SECRET - LL's origin setting: Unique string used for hashing, Recommended length - 256 bits
 * SMTP_* - SMTP connection settings
+* MONGO_URL - full mongo db connection URL
 
 To run the services:
 
