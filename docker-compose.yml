@@ -81,7 +81,7 @@ services:
         network_mode: bridge
         links:
             - redis
-            - api
+            - api:llapi
 
     worker:
         image: slidewiki/learninglocker2-app:${DOCKER_TAG}
