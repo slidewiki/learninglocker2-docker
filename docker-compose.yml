@@ -15,6 +15,12 @@ services:
         environment:
             - MONGO_URL
             - REDIS_URL=redis://redis:6379/0
+            - VIRTUAL_HOST=xapi.${DOMAIN_NAME}
+            - VIRTUAL_PORT=8081
+            - LETSENCRYPT_HOST=xapi.${DOMAIN_NAME}
+            - LETSENCRYPT_EMAIL=meissner@informatik.uni-leipzig.de
+        expose:
+            - 8081
         depends_on:
             - redis
         network_mode: bridge
@@ -34,6 +40,10 @@ services:
             - SMTP_USER
             - SMTP_PASS
             - MONGO_URL
+            - VIRTUAL_HOST=api.${DOMAIN_NAME}
+            - VIRTUAL_PORT=8080
+            - LETSENCRYPT_HOST=api.${DOMAIN_NAME}
+            - LETSENCRYPT_EMAIL=meissner@informatik.uni-leipzig.de
         command: "node api/dist/server"
         restart: unless-stopped
         depends_on:
@@ -57,6 +67,10 @@ services:
             - SMTP_USER
             - SMTP_PASS
             - MONGO_URL
+            - VIRTUAL_HOST=${DOMAIN_NAME}
+            - VIRTUAL_PORT=3000
+            - LETSENCRYPT_HOST=${DOMAIN_NAME}
+            - LETSENCRYPT_EMAIL=meissner@informatik.uni-leipzig.de
         command: "./entrypoint-ui.sh"
         restart: unless-stopped
         depends_on:
@@ -67,6 +81,7 @@ services:
         network_mode: bridge
         links:
             - redis
+            - api
 
     worker:
         image: slidewiki/learninglocker2-app:${DOCKER_TAG}
