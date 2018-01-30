@@ -1,14 +1,16 @@
 sudo: required
-
 services:
 - docker
-
+branches:
+  only:
+  - "/^(?i:SWIK)-.*$/"
+  - master
 install: true
-
 script:
-- docker build -t slidewiki/learninglocker2-app:"$TRAVIS_COMMIT" app
-- if [ "$TRAVIS_PULL_REQUEST" == "false" ] && ( [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ] ); then
-    docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD";
-    docker push slidewiki/learninglocker2-app:"$TRAVIS_COMMIT";
-    fi
-
+- echo skipping
+after_success:
+- if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] ; then .travis/dockerhub.sh ; fi
+env:
+  global:
+  - secure: c8LUFZ5VLn/SoUE6207BOj3EXP1cjJg45XB1KgEYcZFJ/GG5n/yi+r/tF8WTGTOFkHAdK7rF7A/QoxxaEVR2494rW78CltWcptJjuUiRebJaQjYjl+UDp2taUVhPEejoxbCdwjBLloFsZ0MeST9xnn3neVhyAW/ZvN6SbiJFIsJ1VFbP97xsxzCGbjk1N+9zoYNXGrIPjnqmfxRC5fYU08qqHwrvAPwKakDWjMcuYt/3Um+hF9wb0gnUEdKLtEcH7m/IJCqlrstcOR5SaJOeHWm4Il80mec6CqY0o37LdRXddKCYesTWn1UF0Gdlu0sY/mkAO2NTmyhnOxGNgjmGMGq/bWVxcTaiFm0Gy66zMo6mfngLwzi5G4fv3WPhJpVlldS1UnsGr4eNev6Roi6cNPQuwFp28z4LNxIy58i4/dhNSPos0tUg7OrLsv9Qm0txVEXLcJtKG0wAVTD212MitEpOKwg/oagbVR2zAFBnN8LItTU/OLVRoR1N5SWr9KnhodTiLz2LaAJSsE4JxGtijl+ZtxVwyQnS0bDkrUfMAU0sYpUqWIi+Etn8Q6f8aEVvNc1iVEfGfYI10RQ2zA9H7lC50UMILYLG4rmbPADK0KYXOAmMl8GOHGxiv3v2m1StI2Y/tHrJCV6WWYqaZVwSQRU5ps1ZddPTInTMNvR0NCs=
+  - secure: XgN2hS91vbbiajiw1fPTCmXmoTlbNOBpFxlmOsU6s+1cwry5drmwD+L5efqvDIstb9JGjxZlWEXlX8L1Txlla/jDofKQlLDIFy9bRYWnbAwQyZ4lW50Cff8Hqly2YPh4c/lFbMoS7u/MbiC0Luq9VE92pqiaKil0NhaqANA/3S/n7RcoHNNg9GRylOg63Y9njRDFz6/5ZDKVbzHvBp80pte+sEVLcjfXc0iJtlxA8+pWsCOPH42kh7nVF7Djc8KKr56JhKJOg667rR723rUu5FxniA7kn6FB4Iv0yrF3Ut2V1s/c43vypCGtEWtyempSNuJcHdU+aW6Sh5pKacTkBUSmYc5iPQ3d2qQydxQvR/hgHTbNABg+T1f1SOXof+ALxO/cNDIFDDl73xh5cng9wtR/jlAaMNu2RukSqOG+kvvFh/bchnexaXUDkPLsd1ENa0xBQ08bdmXDOHbmXg0ktYM8XxsdwaRRBA0aYIn6EG11lj7Y+GmIBXAyj9I/U3QE6JrRs9bLuxAYHPZO6HItd3h/ANSrrmOydBz6VLInfGbR8jbH0/qVPYh2/uiOH8ZGMjnX7YbFSvtcwJgCoKXeF4CS16YSOsgKT402NYaSfOYh7YYT/Oni5KqTglp2ZcomxIkoUgVqjz6UsKIPt2nOKeM36YTsrruHgbUuC0Hfbpc=
