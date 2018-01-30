@@ -9,8 +9,14 @@ install: true
 script:
 - echo skipping
 after_success:
+- openssl aes-256-cbc -K $encrypted_b5d67db4a33e_key -iv $encrypted_b5d67db4a33e_iv -in .travis/deployment_keys.tar.enc -out deployment_keys.tar -d
 - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] ; then .travis/dockerhub.sh ; fi
+- if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] ; then .travis/deploy.sh ; fi
+after_script:
+- rm -f deployment_keys.tar
+- rm -f ~/.docker/{cert,key,ca}.pem
 env:
   global:
   - secure: c8LUFZ5VLn/SoUE6207BOj3EXP1cjJg45XB1KgEYcZFJ/GG5n/yi+r/tF8WTGTOFkHAdK7rF7A/QoxxaEVR2494rW78CltWcptJjuUiRebJaQjYjl+UDp2taUVhPEejoxbCdwjBLloFsZ0MeST9xnn3neVhyAW/ZvN6SbiJFIsJ1VFbP97xsxzCGbjk1N+9zoYNXGrIPjnqmfxRC5fYU08qqHwrvAPwKakDWjMcuYt/3Um+hF9wb0gnUEdKLtEcH7m/IJCqlrstcOR5SaJOeHWm4Il80mec6CqY0o37LdRXddKCYesTWn1UF0Gdlu0sY/mkAO2NTmyhnOxGNgjmGMGq/bWVxcTaiFm0Gy66zMo6mfngLwzi5G4fv3WPhJpVlldS1UnsGr4eNev6Roi6cNPQuwFp28z4LNxIy58i4/dhNSPos0tUg7OrLsv9Qm0txVEXLcJtKG0wAVTD212MitEpOKwg/oagbVR2zAFBnN8LItTU/OLVRoR1N5SWr9KnhodTiLz2LaAJSsE4JxGtijl+ZtxVwyQnS0bDkrUfMAU0sYpUqWIi+Etn8Q6f8aEVvNc1iVEfGfYI10RQ2zA9H7lC50UMILYLG4rmbPADK0KYXOAmMl8GOHGxiv3v2m1StI2Y/tHrJCV6WWYqaZVwSQRU5ps1ZddPTInTMNvR0NCs=
   - secure: XgN2hS91vbbiajiw1fPTCmXmoTlbNOBpFxlmOsU6s+1cwry5drmwD+L5efqvDIstb9JGjxZlWEXlX8L1Txlla/jDofKQlLDIFy9bRYWnbAwQyZ4lW50Cff8Hqly2YPh4c/lFbMoS7u/MbiC0Luq9VE92pqiaKil0NhaqANA/3S/n7RcoHNNg9GRylOg63Y9njRDFz6/5ZDKVbzHvBp80pte+sEVLcjfXc0iJtlxA8+pWsCOPH42kh7nVF7Djc8KKr56JhKJOg667rR723rUu5FxniA7kn6FB4Iv0yrF3Ut2V1s/c43vypCGtEWtyempSNuJcHdU+aW6Sh5pKacTkBUSmYc5iPQ3d2qQydxQvR/hgHTbNABg+T1f1SOXof+ALxO/cNDIFDDl73xh5cng9wtR/jlAaMNu2RukSqOG+kvvFh/bchnexaXUDkPLsd1ENa0xBQ08bdmXDOHbmXg0ktYM8XxsdwaRRBA0aYIn6EG11lj7Y+GmIBXAyj9I/U3QE6JrRs9bLuxAYHPZO6HItd3h/ANSrrmOydBz6VLInfGbR8jbH0/qVPYh2/uiOH8ZGMjnX7YbFSvtcwJgCoKXeF4CS16YSOsgKT402NYaSfOYh7YYT/Oni5KqTglp2ZcomxIkoUgVqjz6UsKIPt2nOKeM36YTsrruHgbUuC0Hfbpc=
+  - secure: IA5HcLEHPxI2NhzhvS4qmGN4WvcL61zi8DGmHJDS+4+u7AwE1PEHuVddCfXFbuvnd61LnwJ3604uY/kF1icwOp5Sj/32o+1RkHrod2d36s1zFqwnVOYpBrJ1AGqyGaVD+y7HFPLFwppZfSlDTd/kXmrXnY4XFZF8VhNexcKQ2OVuV0tUipQK3Cl4oIrvIfbx6VIHMNlCXA2eMShnfYMtNWa3hlk/Qs1+RrMu+T1GLgXgQyIfhNziDXMxdu9jV3J9/5VaaeSq5sS6a7zX7L33vOtN64+vcgO3JQfn3++he+8thdtaDRrkwPKPUau85dtu9wBXWcYbTerq0Gseu1DYoA00HrU1Og44aDAjDDF6+MRtog3FmtdKRmyEMWOHRQJ/EJnDcXpoDNBRTLAeUymvxyOAQL0rcsjkTiIiQQsN6PduqxXpDjCHhQmAgy+dwnq/jc79/k91wLuTgtyeOen30cO2nYCZe8x6VqYuyMRyTTbKHy9PLoCfkNhElNRZC9CDMo43MMamVzP3/EOAyRa+Ohw4vLQI9e8dQkU3t2huHuEhtOpePlWATkY2zuFvc107/6u9VsMSDbsVycS7Xyk3EpBX2BYjndC7eaAUCOIYwrbxyW8BvsfBVPQ54W7PDF2MKVGsAUfEOjTQkf9XmF+1zCPEknfh9SbfvUlhT5L7S4c=
