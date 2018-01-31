@@ -70,16 +70,6 @@ and just call the command:
 docker-compose up -d
 ```
 
-### SSL/TLS certs
-
-Mount cert files to nginx container adding a section in docker-compose.yml:
-
-```
-     volumes:
-        - "/path-to-certs-on-docker-host/fullchain.pem:/root/ssl/fullchain.pem:ro"
-        - "/path-to-certs-on-docker-host/privkey.pem:/root/ssl/privkey.pem:ro"
-```
-
 ### Backups
 
 Backup $DATA_LOCATION, i.e. the Docker volumes: Mongo's data and app's storage. 
