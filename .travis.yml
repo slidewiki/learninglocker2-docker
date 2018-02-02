@@ -1,6 +1,9 @@
 sudo: required
+language: shell
 services:
 - docker
+git:
+  depth: 5
 branches:
   only:
   - "/^(?i:SWIK)-.*$/"
