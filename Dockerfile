@@ -38,9 +38,9 @@ RUN cp -r storage storage.template
 # see env.template
 EXPOSE 3000 8080
 
-COPY env.template .env.template
-COPY entrypoint-common.sh entrypoint-common.sh
-COPY entrypoint-ui.sh entrypoint-ui.sh
+COPY app/env.template .env.template
+COPY app/entrypoint-common.sh entrypoint-common.sh
+COPY app/entrypoint-ui.sh entrypoint-ui.sh
 
 ENTRYPOINT ["./entrypoint-common.sh"]
 
