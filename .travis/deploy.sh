@@ -8,3 +8,6 @@ docker-compose stop
 echo y | docker-compose rm
 docker-compose up -d
 docker rmi $(docker images | grep "<none>" | awk "{print \$3}")
+
+# also connect webserver on experimental to default learninglocker2 network (learninglocker2docker_default) and restart webserver
+docker network connect learninglocker2docker_default webserver && docker restart webserver
