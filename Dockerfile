@@ -42,5 +42,9 @@ COPY app/env.template .env.template
 COPY app/entrypoint-common.sh entrypoint-common.sh
 COPY app/entrypoint-ui.sh entrypoint-ui.sh
 
+# safe value if missing
+ENV API_HOST=api
+ENV API_PORT=8080
+
 ENTRYPOINT ["./entrypoint-common.sh"]
 
