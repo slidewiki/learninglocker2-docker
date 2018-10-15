@@ -29,15 +29,15 @@ services:
             - redis
 
     api:
-        image: slidewiki/learninglocker2-app:${DOCKER_TAG}
+        image: slidewiki/learninglocker2-docker:${DOCKER_TAG}
         environment:
             - DOMAIN_NAME
             - APP_SECRET
             - SMTP_HOST
             - SMTP_PORT
-            - SMTP_SECURED
             - SMTP_USER
             - SMTP_PASS
+            - SMTP_IGNORE_TLS
             - MONGO_URL=mongodb://mongo:27017/learninglocker_v2
             - VIRTUAL_HOST=api.${DOMAIN_NAME}
             - VIRTUAL_PORT=8080
@@ -52,13 +52,12 @@ services:
             - "${DATA_LOCATION}/app-storage:/opt/learninglocker/storage"
 
     ui:
-        image: slidewiki/learninglocker2-app:${DOCKER_TAG}
+        image: slidewiki/learninglocker2-docker:${DOCKER_TAG}
         environment:
             - DOMAIN_NAME
             - APP_SECRET
             - SMTP_HOST
             - SMTP_PORT
-            - SMTP_SECURED
             - SMTP_USER
             - SMTP_PASS
             - MONGO_URL=mongodb://mongo:27017/learninglocker_v2
@@ -76,13 +75,12 @@ services:
             - "${DATA_LOCATION}/app-storage:/opt/learninglocker/storage"
 
     worker:
-        image: slidewiki/learninglocker2-app:${DOCKER_TAG}
+        image: slidewiki/learninglocker2-docker:${DOCKER_TAG}
         environment:
             - DOMAIN_NAME
             - APP_SECRET
             - SMTP_HOST
             - SMTP_PORT
-            - SMTP_SECURED
             - SMTP_USER
             - SMTP_PASS
             - MONGO_URL=mongodb://mongo:27017/learninglocker_v2

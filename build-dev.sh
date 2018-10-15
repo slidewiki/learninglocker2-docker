@@ -2,4 +2,4 @@
 set -e
 
 export DOCKER_TAG=dev
-docker build -t slidewiki/learninglocker2-app:$DOCKER_TAG . 
+docker build -t slidewiki/learninglocker2-docker:$DOCKER_TAG . 
